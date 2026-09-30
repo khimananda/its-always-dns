@@ -1,0 +1,76 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
+project_name: its-always-dns
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - id: its-always-dns
+    main: ./cmd/its-always-dns
+    binary: its-always-dns
+    env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+
+archives:
+  - formats: [tar.gz]
+    name_template: "its-always-dns_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE
+      - README.md
+
+dockers_v2:
+  - images:
+      - ghcr.io/khimananda/its-always-dns
+    tags:
+      - "{{ .Version }}"
+      - "v{{ .Major }}"
+      - latest
+    platforms:
+      - linux/amd64
+      - linux/arm64
+    labels:
+      org.opencontainers.image.source: https://github.com/khimananda/its-always-dns
+      org.opencontainers.image.description: Network diagnostics that always conclude it was DNS
+      org.opencontainers.image.licenses: MIT
+      org.opencontainers.image.base.name: gcr.io/distroless/static-debian12:nonroot
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  filters:
+    exclude: ["^docs:", "^test:", "^chore:"]
+
+homebrew_casks:
+  - name: its-always-dns
+    binaries: [its-always-dns]
+    repository:
+      owner: khimananda
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Casks
+    homepage: https://github.com/khimananda/its-always-dns
+    description: Network diagnostics that always conclude it was DNS
+    license: MIT
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/its-always-dns"]
+          end
+
+release:
+  footer: |
+    Install: `brew install khimananda/tap/its-always-dns` or `docker run --rm ghcr.io/khimananda/its-always-dns:{{ .Version }} example.com`

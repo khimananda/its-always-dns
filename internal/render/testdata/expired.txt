@@ -1,0 +1,31 @@
+
+  CASE #5173: The Unreachable Host
+  Target api.example.com:443   Investigator its-always-dns 1.0.0
+
+  Suspect 1: The Resolver
+    resolv.conf           nameserver 10.96.0.10, search svc.cluster.local cluster.local, ndots:5
+    ndots                 ndots:5 with 2 search domains: api.example.com tries 2 wrong names before the real one. Add a trailing dot or lower ndots
+    system lookup         api.example.com -> 203.0.113.10  412 ms
+    1.1.1.1               203.0.113.10 (TTL 300)  9 ms
+    authoritative         203.0.113.10 (TTL 300) from ns1.example.com  31 ms
+    Verdict: Suspicious.
+
+  Suspect 2: The Network
+    connect               203.0.113.10:443 connected  18 ms
+    Verdict: Cleared.
+
+  Suspect 3: The Certificate
+    handshake             certificate expired 3 days ago (2026-09-27)  40 ms
+    Verdict: Guilty.
+
+  Suspect 4: The Application
+    skipped               not questioned: the TLS handshake failed first
+    Verdict: Not questioned.
+
+  ────────────────────────────────────────────
+  It was DNS.
+
+  The DNS would like you to know it has an alibi. The Certificate did it: certificate expired 3 days ago (2026-09-27).
+
+  Exit code 53. Use --serious for a boring report.
+

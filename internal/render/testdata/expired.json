@@ -1,0 +1,108 @@
+{
+  "case_number": 5173,
+  "title": "The Unreachable Host",
+  "target": {
+    "raw": "",
+    "host": "api.example.com",
+    "port": 443,
+    "scheme": "https",
+    "url": "https://api.example.com/",
+    "is_ip": false
+  },
+  "conclusion": "It was DNS.",
+  "evidence": [
+    "certificate expired 3 days ago (2026-09-27)"
+  ],
+  "alibi": "The DNS would like you to know it has an alibi. The Certificate did it: certificate expired 3 days ago (2026-09-27).",
+  "actual_culprit": "tls",
+  "failures": 1,
+  "warnings": 1,
+  "suspects": [
+    {
+      "suspect": "dns",
+      "title": "The Resolver",
+      "verdict": "suspicious",
+      "verdict_line": "Suspicious.",
+      "findings": [
+        {
+          "suspect": "dns",
+          "check": "resolv.conf",
+          "detail": "nameserver 10.96.0.10, search svc.cluster.local cluster.local, ndots:5",
+          "severity": "ok"
+        },
+        {
+          "suspect": "dns",
+          "check": "ndots",
+          "detail": "ndots:5 with 2 search domains: api.example.com tries 2 wrong names before the real one. Add a trailing dot or lower ndots",
+          "severity": "warn"
+        },
+        {
+          "suspect": "dns",
+          "check": "system lookup",
+          "detail": "api.example.com -\u003e 203.0.113.10",
+          "severity": "ok",
+          "duration_ms": 412
+        },
+        {
+          "suspect": "dns",
+          "check": "1.1.1.1",
+          "detail": "203.0.113.10 (TTL 300)",
+          "severity": "ok",
+          "duration_ms": 9
+        },
+        {
+          "suspect": "dns",
+          "check": "authoritative",
+          "detail": "203.0.113.10 (TTL 300) from ns1.example.com",
+          "severity": "ok",
+          "duration_ms": 31
+        }
+      ]
+    },
+    {
+      "suspect": "tcp",
+      "title": "The Network",
+      "verdict": "cleared",
+      "verdict_line": "Cleared.",
+      "findings": [
+        {
+          "suspect": "tcp",
+          "check": "connect",
+          "detail": "203.0.113.10:443 connected",
+          "severity": "ok",
+          "duration_ms": 18
+        }
+      ]
+    },
+    {
+      "suspect": "tls",
+      "title": "The Certificate",
+      "verdict": "guilty",
+      "verdict_line": "Guilty.",
+      "findings": [
+        {
+          "suspect": "tls",
+          "check": "handshake",
+          "detail": "certificate expired 3 days ago (2026-09-27)",
+          "severity": "fail",
+          "duration_ms": 40
+        }
+      ]
+    },
+    {
+      "suspect": "http",
+      "title": "The Application",
+      "verdict": "not questioned",
+      "verdict_line": "Not questioned.",
+      "findings": [
+        {
+          "suspect": "http",
+          "check": "skipped",
+          "detail": "not questioned: the TLS handshake failed first",
+          "severity": "info"
+        }
+      ]
+    }
+  ],
+  "version": "1.0.0"
+}

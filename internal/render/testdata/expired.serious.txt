@@ -1,0 +1,12 @@
+its-always-dns 1.0.0 report for api.example.com:443
+
+DNS   ok    resolv.conf           nameserver 10.96.0.10, search svc.cluster.local cluster.local, ndots:5
+DNS   warn  ndots                 ndots:5 with 2 search domains: api.example.com tries 2 wrong names before the real one. Add a trailing dot or lower ndots
+DNS   ok    system lookup         api.example.com -> 203.0.113.10 (412 ms)
+DNS   ok    1.1.1.1               203.0.113.10 (TTL 300) (9 ms)
+DNS   ok    authoritative         203.0.113.10 (TTL 300) from ns1.example.com (31 ms)
+TCP   ok    connect               203.0.113.10:443 connected (18 ms)
+TLS   fail  handshake             certificate expired 3 days ago (2026-09-27) (40 ms)
+HTTP  info  skipped               not questioned: the TLS handshake failed first
+
+Result: 1 failures, 1 warnings. Most likely cause: TLS: certificate expired 3 days ago (2026-09-27).

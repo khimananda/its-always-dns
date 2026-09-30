@@ -1,0 +1,59 @@
+{
+  "case_number": 1099,
+  "title": "The Unreachable Host",
+  "target": {
+    "raw": "",
+    "host": "api.example.com",
+    "port": 443,
+    "scheme": "https",
+    "url": "https://api.example.com/",
+    "is_ip": false
+  },
+  "conclusion": "It was DNS.",
+  "evidence": [
+    "system lookup: api.example.com does not exist (NXDOMAIN or no records)",
+    "1.1.1.1: NXDOMAIN: this resolver says the name does not exist"
+  ],
+  "actual_culprit": "dns",
+  "failures": 2,
+  "warnings": 0,
+  "suspects": [
+    {
+      "suspect": "dns",
+      "title": "The Resolver",
+      "verdict": "guilty",
+      "verdict_line": "Guilty. Obviously.",
+      "findings": [
+        {
+          "suspect": "dns",
+          "check": "system lookup",
+          "detail": "api.example.com does not exist (NXDOMAIN or no records)",
+          "severity": "fail",
+          "duration_ms": 22
+        },
+        {
+          "suspect": "dns",
+          "check": "1.1.1.1",
+          "detail": "NXDOMAIN: this resolver says the name does not exist",
+          "severity": "fail",
+          "duration_ms": 8
+        }
+      ]
+    },
+    {
+      "suspect": "tcp",
+      "title": "The Network",
+      "verdict": "not questioned",
+      "verdict_line": "Not questioned.",
+      "findings": [
+        {
+          "suspect": "tcp",
+          "check": "skipped",
+          "detail": "not questioned: DNS gave us no address to call",
+          "severity": "info"
+        }
+      ]
+    }
+  ],
+  "version": "1.0.0"
+}

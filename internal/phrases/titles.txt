@@ -1,0 +1,16 @@
+# Case titles. One per line, under 32 characters. Lines starting with # are ignored.
+The Unreachable Host
+The Missing Record
+The Stale Cache
+The Five Dots
+The Negative TTL
+The Split Horizon
+The Lame Delegation
+The Propagation Delay
+The Friday Deploy
+The Forgotten Hosts File
+The Trailing Dot
+The Expired Glue
+The Search Domain
+The CNAME at the Apex
+The Low TTL Migration

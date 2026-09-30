@@ -1,0 +1,12 @@
+# Real DNS failure modes for the `why` command. Format: title | explanation.
+# Keep the explanation true, two sentences at most.
+Negative caching | When a lookup fails, resolvers cache the failure for the SOA minimum TTL. Create the record after someone asked for it, and they keep getting NXDOMAIN until that timer runs out.
+ndots:5 | Kubernetes pods default to ndots:5, so any name with fewer than five dots is first tried with every search domain appended. api.example.com costs several wasted lookups before the real one.
+Split horizon | The same name resolves differently inside and outside a network. It works on the VPN, fails at home, and everyone is right.
+Stale glue | The parent zone holds glue records pointing at your name servers. Move the name servers and forget the glue, and part of the internet keeps asking the old ones.
+CNAME at the apex | A CNAME cannot live next to the SOA and NS records at a zone apex. Providers fake it with ALIAS or ANAME records, and tools disagree about what they see.
+TTL during migrations | Lower the TTL days before a migration, not minutes before. Resolvers honour the TTL they cached last, which was the long one.
+DNSSEC | A signature that expired or a DS record that no longer matches turns every answer into SERVFAIL. Validating resolvers fail and non-validating ones work, which looks random.
+The hosts file | /etc/hosts wins before DNS is asked at all. An entry someone added for testing in 2019 is still there.
+Resolver caches in apps | The JVM, Node agents and some HTTP clients cache lookups themselves, sometimes forever. The record changed, the process did not.
+musl and search domains | Alpine's musl libc queries search domains in parallel and handles some edge cases differently from glibc. The same image base swap can change DNS behaviour.

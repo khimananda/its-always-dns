@@ -1,0 +1,21 @@
+
+  CASE #1099: The Unreachable Host
+  Target api.example.com:443   Investigator its-always-dns 1.0.0
+
+  Suspect 1: The Resolver
+    system lookup         api.example.com does not exist (NXDOMAIN or no records)  22 ms
+    1.1.1.1               NXDOMAIN: this resolver says the name does not exist  8 ms
+    Verdict: Guilty. Obviously.
+
+  Suspect 2: The Network
+    skipped               not questioned: DNS gave us no address to call
+    Verdict: Not questioned.
+
+  ────────────────────────────────────────────
+  It was DNS.
+
+  Evidence:
+    - system lookup: api.example.com does not exist (NXDOMAIN or no records)
+    - 1.1.1.1: NXDOMAIN: this resolver says the name does not exist
+  Exit code 53. Use --serious for a boring report.
+

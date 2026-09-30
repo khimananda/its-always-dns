@@ -1,0 +1,81 @@
+{
+  "case_number": 1007,
+  "title": "The Unreachable Host",
+  "target": {
+    "raw": "",
+    "host": "api.example.com",
+    "port": 443,
+    "scheme": "https",
+    "url": "https://api.example.com/",
+    "is_ip": false
+  },
+  "conclusion": "It was DNS.",
+  "evidence": [
+    "none whatsoever. It was DNS anyway."
+  ],
+  "failures": 0,
+  "warnings": 0,
+  "suspects": [
+    {
+      "suspect": "dns",
+      "title": "The Resolver",
+      "verdict": "cleared",
+      "verdict_line": "Cleared. Allegedly.",
+      "findings": [
+        {
+          "suspect": "dns",
+          "check": "system lookup",
+          "detail": "api.example.com -\u003e 203.0.113.10",
+          "severity": "ok",
+          "duration_ms": 3
+        }
+      ]
+    },
+    {
+      "suspect": "tcp",
+      "title": "The Network",
+      "verdict": "cleared",
+      "verdict_line": "Cleared.",
+      "findings": [
+        {
+          "suspect": "tcp",
+          "check": "connect",
+          "detail": "203.0.113.10:443 connected",
+          "severity": "ok",
+          "duration_ms": 18
+        }
+      ]
+    },
+    {
+      "suspect": "tls",
+      "title": "The Certificate",
+      "verdict": "cleared",
+      "verdict_line": "Cleared.",
+      "findings": [
+        {
+          "suspect": "tls",
+          "check": "handshake",
+          "detail": "CN api.example.com, issued by Let's Encrypt, expires in 41 days, TLS 1.3",
+          "severity": "ok",
+          "duration_ms": 35
+        }
+      ]
+    },
+    {
+      "suspect": "http",
+      "title": "The Application",
+      "verdict": "cleared",
+      "verdict_line": "Cleared.",
+      "findings": [
+        {
+          "suspect": "http",
+          "check": "GET /",
+          "detail": "200 OK, server nginx",
+          "severity": "ok",
+          "duration_ms": 96
+        }
+      ]
+    }
+  ],
+  "version": "1.0.0"
+}

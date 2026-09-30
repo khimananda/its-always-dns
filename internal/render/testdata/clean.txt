@@ -1,0 +1,26 @@
+
+  CASE #1007: The Unreachable Host
+  Target api.example.com:443   Investigator its-always-dns 1.0.0
+
+  Suspect 1: The Resolver
+    system lookup         api.example.com -> 203.0.113.10  3 ms
+    Verdict: Cleared. Allegedly.
+
+  Suspect 2: The Network
+    connect               203.0.113.10:443 connected  18 ms
+    Verdict: Cleared.
+
+  Suspect 3: The Certificate
+    handshake             CN api.example.com, issued by Let's Encrypt, expires in 41 days, TLS 1.3  35 ms
+    Verdict: Cleared.
+
+  Suspect 4: The Application
+    GET /                 200 OK, server nginx  96 ms
+    Verdict: Cleared.
+
+  ────────────────────────────────────────────
+  It was DNS.
+
+  Evidence: none whatsoever. It was DNS anyway.
+  Exit code 53. Use --serious for a boring report.
+

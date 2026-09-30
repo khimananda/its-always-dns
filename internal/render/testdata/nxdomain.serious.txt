@@ -1,0 +1,7 @@
+its-always-dns 1.0.0 report for api.example.com:443
+
+DNS   fail  system lookup         api.example.com does not exist (NXDOMAIN or no records) (22 ms)
+DNS   fail  1.1.1.1               NXDOMAIN: this resolver says the name does not exist (8 ms)
+TCP   info  skipped               not questioned: DNS gave us no address to call
+
+Result: 2 failures, 0 warnings. Most likely cause: DNS: system lookup: api.example.com does not exist (NXDOMAIN or no records).
